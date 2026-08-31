@@ -1,0 +1,58 @@
+{
+  "patients": [
+    {
+      "id": "patient_001",
+      "patientNumber": "P001",
+      "firstName": "John",
+      "lastName": "Perera",
+      "dateOfBirth": "1980-05-12",
+      "gender": "Male",
+      "nic": "800512345V",
+      "phone": "+94771234567",
+      "email": "john.perera@example.com",
+      "address": "123 Main St, Colombo",
+      "bloodGroup": "O+",
+      "emergencyContact": { "name": "Saman Perera", "phone": "+94771230000", "relation": "Brother" },
+      "createdAt": "2026-08-29T10:00:00Z"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "doctor_001",
+      "employeeId": "D001",
+      "name": "Dr. Kasun Perera",
+      "specialization": "Cardiology",
+      "departmentId": "dept_cardiology",
+      "phone": "+94771239999",
+      "email": "kasun.perera@hospital.test",
+      "availability": ["Mon-Fri 08:30-16:30"],
+      "status": "Active",
+      "createdAt": "2026-08-20T08:00:00Z"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "apt_001",
+      "patientId": "patient_001",
+      "doctorId": "doctor_001",
+      "departmentId": "dept_cardiology",
+      "appointmentDate": "2026-09-15T09:00:00Z",
+      "reason": "Follow-up",
+      "status": "Scheduled",
+      "createdBy": "reception_01",
+      "createdAt": "2026-08-29T11:00:00Z"
+    }
+  ],
+  "audit_logs": [
+    {
+      "id": "log_001",
+      "userId": "admin_01",
+      "userName": "Admin User",
+      "action": "CreatePatient",
+      "module": "patients",
+      "recordId": "patient_001",
+      "timestamp": "2026-08-29T10:05:00Z",
+      "description": "Created patient record P001"
+    }
+  ]
+}

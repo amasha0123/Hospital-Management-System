@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Admins and SERVICE role have wide access
+    function isAdmin() {
+      return request.auth != null && request.auth.token.role == 'ADMIN';
+    }
+    function isService() {
+      return request.auth != null && request.auth.token.role == 'SERVICE';
+    }
+
+    // Generic: allow admins full access
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Patients collection: readable by staff but writable by receptionist/admin
+    match /patients/{patientId} {
+      allow read: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR','NURSE','RECEPTIONIST'];
+      allow create: if request.auth != null && request.auth.token.role in ['ADMIN','RECEPTIONIST'];
+      allow update, delete: if request.auth != null && request.auth.token.role == 'ADMIN';
+
+      match /medical_records/{recordId} {
+        allow read: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR','NURSE'];
+        allow create: if request.auth != null && request.auth.token.role == 'DOCTOR';
+        allow update: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR'];
+        allow delete: if false; // avoid hard deletes
+      }
+    }
+
+    // Doctors
+    match /doctors/{doctorId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+
+    // Medicines (pharmacy) - restricted writes
+    match /medicines/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.token.role in ['ADMIN','PHARMACIST'];
+    }
+
+    // Appointments
+    match /appointments/{aptId} {
+      allow read: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR','NURSE','RECEPTIONIST'];
+      allow create: if request.auth != null && request.auth.token.role in ['ADMIN','RECEPTIONIST'];
+      allow update: if request.auth != null && request.auth.token.role in ['ADMIN','RECEPTIONIST','DOCTOR'];
+      allow delete: if request.auth != null && request.auth.token.role == 'ADMIN';
+    }
+
+    // Audit logs - writes only from server/service or admin; read only admin
+    match /audit_logs/{logId} {
+      allow create: if request.auth != null && (isAdmin() || isService());
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // Notifications - user specific
+    match /notifications/{notifId} {
+      allow create: if request.auth != null && request.auth.token.role in ['ADMIN','SERVICE'];
+      allow read, update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if false;
+    }
+  }
+}
