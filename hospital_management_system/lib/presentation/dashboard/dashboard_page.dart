@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../auth/auth_provider.dart';
 import 'dashboard_provider.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -8,18 +10,95 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(dashboardStatsProvider);
+    final role = ref.watch(userRoleProvider);
+    final isDoctor = role == 'DOCTOR';
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Hospital Management System'),
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Text(
+                'HMS',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.dashboard),
+              title: const Text('Dashboard'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text('Patients'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/patients');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.medical_services),
+              title: const Text('Doctors'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/doctors');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.calendar_month),
+              title: const Text('Appointments'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/appointments');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.folder_shared),
+              title: const Text('Medical Records'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/medical-records');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.science),
+              title: const Text('Laboratory'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/laboratory');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.medication),
+              title: const Text('Pharmacy'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/pharmacy');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long),
+              title: const Text('Billing'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/billing');
+              },
+            ),
+          ],
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            const Text(
-              'Welcome, Administrator',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            Text(
+              isDoctor ? 'Welcome, Doctor' : 'Welcome, Administrator',
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             GridView.count(
@@ -39,14 +118,14 @@ class DashboardPage extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _InfoPanel(
-                    title: 'Laboratory Requests',
+                    title: isDoctor ? 'Pending Reports' : 'Laboratory Requests',
                     value: '${stats.labRequests}',
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: _InfoPanel(
-                    title: 'Pharmacy Alerts',
+                    title: isDoctor ? 'Follow-ups' : 'Pharmacy Alerts',
                     value: '${stats.pharmacyAlerts}',
                   ),
                 ),

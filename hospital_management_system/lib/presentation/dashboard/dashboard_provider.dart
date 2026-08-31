@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../auth/auth_provider.dart';
 
 class DashboardStats {
   final int patients;
@@ -17,6 +18,19 @@ class DashboardStats {
 }
 
 final dashboardStatsProvider = Provider<DashboardStats>((ref) {
+  final role = ref.watch(userRoleProvider);
+  final isDoctor = role == 'DOCTOR';
+
+  if (isDoctor) {
+    return const DashboardStats(
+      patients: 142,
+      appointments: 18,
+      revenue: 120000,
+      labRequests: 8,
+      pharmacyAlerts: 3,
+    );
+  }
+
   return const DashboardStats(
     patients: 1250,
     appointments: 45,

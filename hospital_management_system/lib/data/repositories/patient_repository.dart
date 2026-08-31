@@ -25,6 +25,11 @@ class PatientRepository {
     return doc.id;
   }
 
+  Future<String> createPatient(Patient patient) async {
+    final doc = await _patients.add(patient.toMap());
+    return doc.id;
+  }
+
   Future<void> updatePatient(String id, Map<String, dynamic> data) async {
     await _patients.doc(id).update(data);
   }

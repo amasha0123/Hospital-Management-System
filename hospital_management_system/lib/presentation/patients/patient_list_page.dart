@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'patient_provider.dart';
 
 class PatientListPage extends ConsumerWidget {
@@ -12,7 +13,7 @@ class PatientListPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Patients')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.push('/patients/add'),
         child: const Icon(Icons.add),
       ),
       body: patientsAsync.when(
@@ -28,6 +29,7 @@ class PatientListPage extends ConsumerWidget {
                     trailing: Chip(
                       label: Text(patient.isActive ? 'Active' : 'Inactive'),
                     ),
+                    onTap: () => context.push('/patients/details'),
                   );
                 },
               ),

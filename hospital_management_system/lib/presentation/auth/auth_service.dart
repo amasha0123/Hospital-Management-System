@@ -9,6 +9,17 @@ class AuthService {
 
   User? currentUser() => _auth.currentUser;
 
+  Stream<Map<String, dynamic>?> watchUserProfile(String uid) {
+    return _firestore.collection('users').doc(uid).snapshots().map((snapshot) {
+      return snapshot.data();
+    });
+  }
+
+  Future<Map<String, dynamic>?> getUserProfile(String uid) async {
+    final snapshot = await _firestore.collection('users').doc(uid).get();
+    return snapshot.data();
+  }
+
   Future<UserCredential> signIn(String email, String password) async {
     return await _auth.signInWithEmailAndPassword(email: email, password: password);
   }

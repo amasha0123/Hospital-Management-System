@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/models/patient.dart';
-import '../../data/repositories/patient_repository.dart';
-import 'patient_provider.dart';
+import '../../data/models/doctor.dart';
+import '../../data/repositories/doctor_repository.dart';
+import 'doctor_provider.dart';
 
-class AddPatientPage extends ConsumerStatefulWidget {
-  const AddPatientPage({super.key});
+class AddDoctorPage extends ConsumerStatefulWidget {
+  const AddDoctorPage({super.key});
 
   @override
-  ConsumerState<AddPatientPage> createState() => _AddPatientPageState();
+  ConsumerState<AddDoctorPage> createState() => _AddDoctorPageState();
 }
 
-class _AddPatientPageState extends ConsumerState<AddPatientPage> {
+class _AddDoctorPageState extends ConsumerState<AddDoctorPage> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  final _specialtyController = TextEditingController();
+  final _departmentController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
-  final _genderController = TextEditingController(text: 'Male');
   bool _saving = false;
 
   @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
+    _specialtyController.dispose();
+    _departmentController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
-    _genderController.dispose();
     super.dispose();
   }
 
@@ -35,32 +37,33 @@ class _AddPatientPageState extends ConsumerState<AddPatientPage> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _saving = true);
-    final repo = ref.read(patientRepositoryProvider);
+    final repo = ref.read(doctorRepositoryProvider);
 
     try {
-      final patient = Patient(
+      final doctor = Doctor(
         id: '',
-        patientNumber: 'P${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
+        doctorNumber: 'D${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
-        gender: _genderController.text.trim(),
+        specialty: _specialtyController.text.trim(),
+        department: _departmentController.text.trim(),
         phone: _phoneController.text.trim(),
         email: _emailController.text.trim(),
       );
 
-      await repo.createPatient(patient);
+      await repo.createDoctor(doctor);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Patient registered successfully.')),
+          const SnackBar(content: Text('Doctor added successfully.')),
         );
-        ref.invalidate(patientListProvider);
+        ref.invalidate(doctorListProvider);
         context.pop();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to register patient: $e')),
+          SnackBar(content: Text('Failed to save doctor: $e')),
         );
       }
     } finally {
@@ -71,7 +74,7 @@ class _AddPatientPageState extends ConsumerState<AddPatientPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Patient')),
+      appBar: AppBar(title: const Text('Add Doctor')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -81,13 +84,25 @@ class _AddPatientPageState extends ConsumerState<AddPatientPage> {
               TextFormField(
                 controller: _firstNameController,
                 decoration: const InputDecoration(labelText: 'First Name *'),
-                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter patient name.' : null,
+                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter first name.' : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _lastNameController,
                 decoration: const InputDecoration(labelText: 'Last Name *'),
-                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter patient last name.' : null,
+                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter last name.' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _specialtyController,
+                decoration: const InputDecoration(labelText: 'Specialty *'),
+                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter specialty.' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _departmentController,
+                decoration: const InputDecoration(labelText: 'Department *'),
+                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter department.' : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -99,14 +114,9 @@ class _AddPatientPageState extends ConsumerState<AddPatientPage> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email *'),
                 keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _genderController,
-                decoration: const InputDecoration(labelText: 'Gender *'),
-                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter gender.' : null,
+                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter email.' : null,
               ),
               const SizedBox(height: 20),
               FilledButton(
@@ -117,7 +127,7 @@ class _AddPatientPageState extends ConsumerState<AddPatientPage> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Register Patient'),
+                    : const Text('Save Doctor'),
               )
             ],
           ),
