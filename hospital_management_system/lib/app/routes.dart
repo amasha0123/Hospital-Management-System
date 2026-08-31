@@ -16,6 +16,10 @@ import '../presentation/medical_records/medical_record_list_page.dart';
 import '../presentation/pharmacy/add_pharmacy_item_page.dart';
 import '../presentation/pharmacy/pharmacy_list_page.dart';
 import '../presentation/patients/add_patient_page.dart';
+import '../presentation/reports/add_report_page.dart';
+import '../presentation/reports/report_list_page.dart';
+import '../presentation/staff/add_staff_member_page.dart';
+import '../presentation/staff/staff_list_page.dart';
 import '../presentation/patients/edit_patient_page.dart';
 import '../presentation/patients/patient_details_page.dart';
 import '../presentation/patients/patient_list_page.dart';
@@ -43,5 +47,9 @@ final router = GoRouter(
     GoRoute(path: '/pharmacy/add', builder: (ctx, state) => const AddPharmacyItemPage()),
     GoRoute(path: '/billing', builder: (ctx, state) => const BillingListPage()),
     GoRoute(path: '/billing/add', builder: (ctx, state) => const AddBillingRecordPage()),
+    GoRoute(path: '/staff', builder: (ctx, state) => const StaffListPage()),
+    GoRoute(path: '/staff/add', builder: (ctx, state) => const AddStaffMemberPage()),
+    GoRoute(path: '/reports', builder: (ctx, state) => const ReportListPage()),
+    GoRoute(path: '/reports/add', builder: (ctx, state) => const AddReportPage()),
   ],
 );

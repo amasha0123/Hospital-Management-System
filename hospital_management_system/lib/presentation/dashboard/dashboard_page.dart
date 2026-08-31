@@ -89,6 +89,22 @@ class DashboardPage extends ConsumerWidget {
                 context.go('/billing');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.badge),
+              title: const Text('Staff'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/staff');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.bar_chart),
+              title: const Text('Reports'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/reports');
+              },
+            ),
           ],
         ),
       ),
