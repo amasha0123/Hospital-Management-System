@@ -109,7 +109,7 @@ class _AddBillingRecordPageState extends ConsumerState<AddBillingRecordPage> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Save Billing Record'),
+                    : const Text('Generate Bill'),
               )
             ],
           ),

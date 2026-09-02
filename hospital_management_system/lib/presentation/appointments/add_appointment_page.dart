@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/models/appointment.dart';
-import '../../data/repositories/appointment_repository.dart';
 import 'appointment_provider.dart';
 
 class AddAppointmentPage extends ConsumerStatefulWidget {
@@ -15,9 +14,15 @@ class AddAppointmentPage extends ConsumerStatefulWidget {
 class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
   final _formKey = GlobalKey<FormState>();
   final _patientNameController = TextEditingController();
-  final _doctorNameController = TextEditingController();
   final _reasonController = TextEditingController();
+  final List<String> _doctorOptions = [
+    'Dr. Sarah Johnson',
+    'Dr. Daniel Lee',
+    'Dr. Priya Nair',
+    'Dr. Michael Chen',
+  ];
   DateTime _selectedDate = DateTime.now();
+  String _selectedDoctor = 'Dr. Sarah Johnson';
   bool _saving = false;
 
   Future<void> _pickDate() async {
@@ -46,7 +51,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
         patientId: 'P${DateTime.now().millisecondsSinceEpoch}',
         patientName: _patientNameController.text.trim(),
         doctorId: 'D${DateTime.now().millisecondsSinceEpoch}',
-        doctorName: _doctorNameController.text.trim(),
+        doctorName: _selectedDoctor,
         appointmentDate: _selectedDate,
         status: 'Scheduled',
         reason: _reasonController.text.trim(),
@@ -75,7 +80,6 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
   @override
   void dispose() {
     _patientNameController.dispose();
-    _doctorNameController.dispose();
     _reasonController.dispose();
     super.dispose();
   }
@@ -96,10 +100,15 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                 validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter patient name.' : null,
               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _doctorNameController,
-                decoration: const InputDecoration(labelText: 'Doctor Name *'),
-                validator: (value) => (value == null || value.trim().isEmpty) ? 'Please enter doctor name.' : null,
+              DropdownButtonFormField<String>(
+                value: _selectedDoctor,
+                decoration: const InputDecoration(labelText: 'Doctor Selection *'),
+                items: _doctorOptions
+                    .map((doctor) => DropdownMenuItem(value: doctor, child: Text(doctor)))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) setState(() => _selectedDoctor = value);
+                },
               ),
               const SizedBox(height: 12),
               ListTile(

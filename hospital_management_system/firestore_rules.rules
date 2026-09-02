@@ -2,65 +2,129 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Admins and SERVICE role have wide access
-    function isAdmin() {
-      return request.auth != null && request.auth.token.role == 'ADMIN';
-    }
-    function isService() {
-      return request.auth != null && request.auth.token.role == 'SERVICE';
+    function signedIn() {
+      return request.auth != null;
     }
 
-    // Generic: allow admins full access
+    function userRole() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+        : null;
+    }
+
+    function isAdmin() {
+      return signedIn() && userRole() == 'ADMIN';
+    }
+
+    function isDoctor() {
+      return signedIn() && userRole() == 'DOCTOR';
+    }
+
+    function isNurse() {
+      return signedIn() && userRole() == 'NURSE';
+    }
+
+    function isReceptionist() {
+      return signedIn() && userRole() == 'RECEPTIONIST';
+    }
+
+    function isLabStaff() {
+      return signedIn() && userRole() == 'LAB_STAFF';
+    }
+
+    function isPharmacist() {
+      return signedIn() && userRole() == 'PHARMACIST';
+    }
+
+    function isAccountant() {
+      return signedIn() && userRole() == 'ACCOUNTANT';
+    }
+
+    // Default rule: authenticated users can only access their own profile
+    match /users/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow create, update: if signedIn() && request.auth.uid == userId;
+      allow delete: if isAdmin();
+    }
+
+    // Admins get full access; most users are limited by role
     match /{document=**} {
       allow read, write: if isAdmin();
     }
 
-    // Patients collection: readable by staff but writable by receptionist/admin
     match /patients/{patientId} {
-      allow read: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR','NURSE','RECEPTIONIST'];
-      allow create: if request.auth != null && request.auth.token.role in ['ADMIN','RECEPTIONIST'];
-      allow update, delete: if request.auth != null && request.auth.token.role == 'ADMIN';
+      allow read: if signedIn() && userRole() in ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'];
+      allow create: if signedIn() && userRole() in ['ADMIN', 'RECEPTIONIST'];
+      allow update, delete: if isAdmin();
 
       match /medical_records/{recordId} {
-        allow read: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR','NURSE'];
-        allow create: if request.auth != null && request.auth.token.role == 'DOCTOR';
-        allow update: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR'];
-        allow delete: if false; // avoid hard deletes
+        allow read: if signedIn() && userRole() in ['ADMIN', 'DOCTOR', 'NURSE'];
+        allow create: if isDoctor();
+        allow update: if isAdmin() || isDoctor();
+        allow delete: if false;
       }
     }
 
-    // Doctors
     match /doctors/{doctorId} {
-      allow read: if request.auth != null;
+      allow read: if signedIn();
       allow write: if isAdmin();
     }
 
-    // Medicines (pharmacy) - restricted writes
     match /medicines/{docId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.token.role in ['ADMIN','PHARMACIST'];
+      allow read: if signedIn();
+      allow write: if isAdmin() || isPharmacist();
     }
 
-    // Appointments
     match /appointments/{aptId} {
-      allow read: if request.auth != null && request.auth.token.role in ['ADMIN','DOCTOR','NURSE','RECEPTIONIST'];
-      allow create: if request.auth != null && request.auth.token.role in ['ADMIN','RECEPTIONIST'];
-      allow update: if request.auth != null && request.auth.token.role in ['ADMIN','RECEPTIONIST','DOCTOR'];
-      allow delete: if request.auth != null && request.auth.token.role == 'ADMIN';
+      allow read: if signedIn() && userRole() in ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'];
+      allow create: if signedIn() && userRole() in ['ADMIN', 'RECEPTIONIST'];
+      allow update: if signedIn() && userRole() in ['ADMIN', 'RECEPTIONIST', 'DOCTOR'];
+      allow delete: if isAdmin();
     }
 
-    // Audit logs - writes only from server/service or admin; read only admin
     match /audit_logs/{logId} {
-      allow create: if request.auth != null && (isAdmin() || isService());
+      allow create: if isAdmin();
       allow read: if isAdmin();
       allow update, delete: if false;
     }
 
-    // Notifications - user specific
     match /notifications/{notifId} {
-      allow create: if request.auth != null && request.auth.token.role in ['ADMIN','SERVICE'];
-      allow read, update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if isAdmin();
+      allow read, update: if signedIn() && request.auth.uid == resource.data.userId;
       allow delete: if false;
+    }
+
+    match /departments/{deptId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    match /admissions/{admissionId} {
+      allow read: if signedIn() && userRole() in ['ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'];
+      allow create, update: if signedIn() && userRole() in ['ADMIN', 'RECEPTIONIST'];
+      allow delete: if isAdmin();
+    }
+
+    match /lab_tests/{testId} {
+      allow read: if signedIn() && userRole() in ['ADMIN', 'DOCTOR', 'LAB_STAFF'];
+      allow create, update: if isAdmin() || isLabStaff() || isDoctor();
+      allow delete: if isAdmin();
+    }
+
+    match /billing/{billId} {
+      allow read: if signedIn() && userRole() in ['ADMIN', 'ACCOUNTANT', 'RECEPTIONIST'];
+      allow create, update: if isAdmin() || isAccountant();
+      allow delete: if isAdmin();
+    }
+
+    match /staff/{staffId} {
+      allow read: if signedIn() && userRole() in ['ADMIN', 'RECEPTIONIST'];
+      allow write: if isAdmin();
+    }
+
+    match /reports/{reportId} {
+      allow read: if signedIn() && userRole() in ['ADMIN', 'DOCTOR', 'ACCOUNTANT'];
+      allow write: if isAdmin();
     }
   }
 }

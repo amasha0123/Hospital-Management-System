@@ -1,0 +1,54 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DFF3FF"/>
+      <stop offset="1" stop-color="#EAF9F6"/>
+    </linearGradient>
+    <linearGradient id="cardA" x1="74" y1="48" x2="426" y2="332" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </gradient>
+    <linearGradient id="cardB" x1="474" y1="52" x2="854" y2="278" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34D399"/>
+      <stop offset="1" stop-color="#10B981"/>
+    </gradient>
+    <linearGradient id="cardC" x1="900" y1="90" x2="1124" y2="378" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </gradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="118" cy="120" r="90" fill="#C9E8FF"/>
+  <circle cx="1060" cy="688" r="120" fill="#D1F7EB"/>
+  <g>
+    <rect x="80" y="80" width="350" height="220" rx="36" fill="url(#cardA)"/>
+    <rect x="510" y="80" width="360" height="180" rx="32" fill="url(#cardB)"/>
+    <rect x="930" y="90" width="180" height="170" rx="30" fill="url(#cardC)"/>
+    <circle cx="162" cy="166" r="36" fill="#DBEAFE" fill-opacity="0.4"/>
+    <path d="M124 171C124 150.013 141.013 133 162 133C182.987 133 200 150.013 200 171V209H162H124V171Z" fill="#EFF6FF"/>
+    <rect x="220" y="150" width="150" height="18" rx="9" fill="#DBEAFE" fill-opacity="0.9"/>
+    <rect x="220" y="186" width="110" height="18" rx="9" fill="#DBEAFE" fill-opacity="0.7"/>
+    <rect x="540" y="132" width="120" height="18" rx="9" fill="#DCFCE7" fill-opacity="0.9"/>
+    <rect x="540" y="170" width="180" height="18" rx="9" fill="#DCFCE7" fill-opacity="0.75"/>
+    <path d="M760 136C760 107.281 783.281 84 812 84H842C870.719 84 894 107.281 894 136V183H760V136Z" fill="#ECFDF5" fill-opacity="0.85"/>
+    <path d="M956 152H1040C1063.2 152 1082 170.804 1082 194V224H914V194C914 170.804 932.804 152 956 152Z" fill="#FFF7ED" fill-opacity="0.8"/>
+  </g>
+  <g>
+    <rect x="90" y="360" width="1020" height="300" rx="42" fill="#FFFFFF" fill-opacity="0.72"/>
+    <rect x="132" y="412" width="220" height="120" rx="24" fill="#EEF4FF"/>
+    <rect x="390" y="412" width="220" height="120" rx="24" fill="#ECFDF5"/>
+    <rect x="648" y="412" width="220" height="120" rx="24" fill="#FEF3C7"/>
+    <rect x="906" y="412" width="150" height="120" rx="24" fill="#FDE7F3"/>
+    <circle cx="202" cy="470" r="42" fill="#60A5FA"/>
+    <circle cx="460" cy="470" r="42" fill="#34D399"/>
+    <circle cx="718" cy="470" r="42" fill="#F59E0B"/>
+    <circle cx="981" cy="470" r="42" fill="#F472B6"/>
+    <path d="M189 466C189 449.431 202.431 436 219 436V436C235.569 436 249 449.431 249 466V480H189V466Z" fill="#EFF6FF"/>
+    <path d="M481 462C481 445.431 494.431 432 511 432V432C527.569 432 541 445.431 541 462V520H481V462Z" fill="#ECFDF5"/>
+    <path d="M708 472C708 455.431 721.431 442 738 442V442C754.569 442 768 455.431 768 472V510H708V472Z" fill="#FFFBEB"/>
+    <path d="M964 456C964 439.431 977.431 426 994 426V426C1010.57 426 1024 439.431 1024 456V510H964V456Z" fill="#FCE7F3"/>
+    <path d="M190 587H1040" stroke="#D7E7FF" stroke-width="8" stroke-linecap="round"/>
+    <path d="M208 615H740" stroke="#DBEAFE" stroke-width="14" stroke-linecap="round"/>
+    <path d="M208 655H830" stroke="#D1FAE5" stroke-width="14" stroke-linecap="round"/>
+  </g>
+</svg>

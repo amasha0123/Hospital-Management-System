@@ -1,0 +1,20 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="32" fill="#6D4AE8"/>
+  <rect x="24" y="24" width="592" height="372" rx="28" fill="url(#paint0_linear_1_2)" fill-opacity="0.18"/>
+  <circle cx="505" cy="165" r="110" fill="white" fill-opacity="0.2"/>
+  <g opacity="0.95">
+    <rect x="463" y="110" width="84" height="120" rx="20" fill="white"/>
+    <circle cx="505" cy="95" r="48" fill="white"/>
+    <path d="M474 160H536V204C536 211.732 529.732 218 522 218H488C480.268 218 474 211.732 474 204V160Z" fill="#6D4AE8" fill-opacity="0.16"/>
+  </g>
+  <rect x="70" y="100" width="130" height="160" rx="28" fill="white" fill-opacity="0.15"/>
+  <path d="M120 135V205M90 170H150" stroke="white" stroke-width="18" stroke-linecap="round"/>
+  <text x="70" y="300" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Doctors</text>
+  <text x="70" y="345" fill="white" fill-opacity="0.8" font-family="Arial, Helvetica, sans-serif" font-size="24">Specialists &amp; care teams</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_2" x1="640" y1="0" x2="0" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4ECFF"/>
+      <stop offset="1" stop-color="#B8A7FF"/>
+    </linearGradient>
+  </defs>
+</svg>

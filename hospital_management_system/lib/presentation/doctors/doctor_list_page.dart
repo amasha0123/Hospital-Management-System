@@ -29,7 +29,7 @@ class DoctorListPage extends ConsumerWidget {
                     trailing: Chip(
                       label: Text(doctor.isAvailable ? 'Available' : 'Busy'),
                     ),
-                    onTap: () => context.push('/doctors/edit'),
+                    onTap: () => context.push('/doctors/details', extra: doctor),
                   );
                 },
               ),

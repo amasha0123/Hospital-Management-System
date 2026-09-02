@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/models/medical_record.dart';
-import '../../data/repositories/medical_record_repository.dart';
 import 'medical_record_provider.dart';
 
 class AddMedicalRecordPage extends ConsumerStatefulWidget {

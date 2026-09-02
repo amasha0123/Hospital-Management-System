@@ -40,6 +40,9 @@ dependencies:
   firebase_storage: ^12.0.0
   flutter_riverpod: ^3.3.2
   go_router: ^17.5.0
+  pdf: ^3.12.0
+  printing: ^5.14.3
+  flutter_svg: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +60,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+
+  assets:
+    - assets/images/medical_login.svg
+    - assets/images/medical_dashboard.svg
+    - assets/images/doctor_card.svg
+    - assets/images/laboratory_card.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

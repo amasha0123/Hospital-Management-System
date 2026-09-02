@@ -121,7 +121,7 @@ class _CreateUserPageState extends ConsumerState<CreateUserPage> {
                       ),
                       const SizedBox(height: 12),
                       DropdownButtonFormField<String>(
-                        value: _selectedRole,
+                        initialValue: _selectedRole,
                         decoration: const InputDecoration(labelText: 'Role'),
                         items: roles
                             .map((role) => DropdownMenuItem(value: role, child: Text(role)))
